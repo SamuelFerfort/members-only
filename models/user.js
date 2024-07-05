@@ -11,8 +11,9 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     enum: ["regular", "member", "admin"],
+    default: "regular",
   },
-  messages: { type: Schema.Types.ObjectId, ref: "Message" },
+  messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
 });
 
 UserSchema.virtual("fullName").get(function () {
