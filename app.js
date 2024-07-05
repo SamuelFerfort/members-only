@@ -1,3 +1,6 @@
+require("dotenv").config();
+
+
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -7,9 +10,12 @@ const mongoose = require("mongoose");
 
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/auth");
 
 const app = express();
+
+require("./config/database");
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -17,13 +23,12 @@ app.set("view engine", "ejs");
 
 mongoose.set("strictQuery", false);
 
-const mongoDB = process.env.DEV_DB
 
-main().catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect(mongoDB);
-}
 
+
+
+
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
