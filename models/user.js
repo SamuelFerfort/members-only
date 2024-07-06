@@ -14,6 +14,8 @@ const UserSchema = new Schema({
     default: "regular",
   },
   messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
+
+
 });
 
 UserSchema.virtual("fullName").get(function () {
