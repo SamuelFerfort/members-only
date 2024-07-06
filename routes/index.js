@@ -3,7 +3,7 @@ const User = require("../models/user");
 const router = express.Router();
 const authController = require("../controllers/authController");
 const { isAuthenticated } = require("../middleware/authMiddleware");
-
+const passport = require("passport");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index");
@@ -19,7 +19,7 @@ module.exports = router;
 router.post(
   "/",
   passport.authenticate("local", {
-    successRedirect: "/members",
+    successRedirect: "/",
     failureRedirect: "/",
   })
 );

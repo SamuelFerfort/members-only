@@ -53,7 +53,7 @@ exports.sign_up_form_post = [
     });
     try {
       await user.save();
-      res.redirect("/users/login");
+      res.redirect("/");
     } catch (error) {
       next(error);
     }
