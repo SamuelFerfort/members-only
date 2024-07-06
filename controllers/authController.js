@@ -3,6 +3,18 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
+exports.sign_up_form_get = (req, res) => {
+  res.render("sign-up-form", {
+    username: null,
+    errors: null,
+    first_name: null,
+    last_name: null,
+    password: null,
+    passwordConfirmation: null,
+    admin: null,
+  });
+};
+
 exports.sign_up_form_post = [
   body("username", "Username must not be empty")
     .custom(async (value) => {
@@ -16,11 +28,12 @@ exports.sign_up_form_post = [
     .escape(),
   body("password", "password must not be empty")
     .trim()
-    .isLength({ min: 1 })
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 characters")
     .escape(),
   body("passwordConfirmation").custom((value, { req }) => {
     if (value !== req.body.password) {
-      throw new Error("Password confirmation does not match password");
+      throw new Error("Passwords do not match");
     }
     return true;
   }),
@@ -38,8 +51,15 @@ exports.sign_up_form_post = [
 
     if (!errors.isEmpty()) {
       // There are validation errors
-      res.status(400).json({ errors: errors.array() });
-      return;
+      res.render("sign-up-form", {
+        errors: errors.array(),
+        username: req.body.username,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        password: req.body.password,
+        passwordConfirmation: req.body.passwordConfirmation,
+        admin: req.body.admin,
+      });
     }
     let membership_status = "regular";
     if (req.body.admin) {
@@ -63,17 +83,13 @@ exports.sign_up_form_post = [
   }),
 ];
 
-
-exports.verification_post = asyncHandler(async (req, res , next) => {
-
-  if( req.body.password === "123") {
-
-    await User.findByIdAndUpdate(req.user._id, {membership_status: "member"})
-    res.redirect("/")
+exports.verification_post = asyncHandler(async (req, res, next) => {
+  if (req.body.password === "123") {
+    await User.findByIdAndUpdate(req.user._id, { membership_status: "member" });
+    res.redirect("/");
   } else {
     res.render("verification", {
-      error: "Wrong Password"
-    })
+      error: "Wrong Password",
+    });
   }
-
-} )
+});

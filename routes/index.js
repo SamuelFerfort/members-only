@@ -12,19 +12,19 @@ router.get("/", async (req, res, next) => {
   res.render("index", { messages });
 });
 
-router.get("/sign-up", (req, res, next) => {
-  res.render("sign-up-form");
-});
-
+router.get("/sign-up", authController.sign_up_form_get);
 router.post("/sign-up", authController.sign_up_form_post);
-module.exports = router;
 
 router.post(
   "/",
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/",
-  })
+    failureFlash: true, // Enable flash messages for authentication failures
+  }),
+  (req, res) => {
+    console.log("req.flash():", req.flash());
+  }
 );
 
 router.get("/log-out", (req, res, next) => {
@@ -56,6 +56,6 @@ router.get("/verification", isAuthenticated, (req, res) =>
 
 router.post("/verification", isAuthenticated, authController.verification_post);
 
-router.post("/delete", isAuthenticated, messageController.delete_post)
+router.post("/delete", isAuthenticated, messageController.delete_post);
 
 module.exports = router;

@@ -54,7 +54,10 @@
       <input type="submit" name="submit" id="submit" />
     </form>
     <p>No account? <a href="/sign-up">Sign up</a></p>
-
+    <% if (messages.error) { %>
+      <p><%= messages.error %></p>
+    <% } %>
+  
     <% } %>
   </body>
 
