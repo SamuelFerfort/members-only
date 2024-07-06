@@ -3,6 +3,9 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
+
+
+
 exports.sign_up_form_post = [
   body("username", "Username must not be empty")
     .custom(async (value) => {
@@ -18,13 +21,12 @@ exports.sign_up_form_post = [
     .trim()
     .isLength({ min: 5 })
     .escape(),
-  body("passwordConfirmation") -
-    custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Password confirmation does not match password");
-      }
-      return true;
-    }),
+  body("passwordConfirmation").custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error("Password confirmation does not match password");
+    }
+    return true;
+  }),
   body("first_name", "First name must not be empty")
     .trim()
     .isLength({ min: 1 })
@@ -51,13 +53,12 @@ exports.sign_up_form_post = [
     });
     try {
       await user.save();
-      res.redirect("/login");
+      res.redirect("/users/login");
     } catch (error) {
       next(error);
     }
   }),
 ];
 
-exports.login_get = (req, res, next) => {
-  res.render("login");
-};
+
+
