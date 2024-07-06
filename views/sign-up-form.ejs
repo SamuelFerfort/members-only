@@ -3,79 +3,116 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
+    <title>Sign Up - Members Only</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .form-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      }
+    </style>
   </head>
   <body>
-    <h1>Sign Up</h1>
-    <form method="post">
-      <div>
-        <label for="username">Username</label>
-        <input
-          type="email"
-          name="username"
-          id="username"
-          required
-          placeholder="test@example.com..."
-          value="<%= username ? username : '' %>"
-        />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          value="<%= password ? password : '' %>"
-        />
-      </div>
-      <div>
-        <label for="passwordConfirmation">Confirm Password</label>
-        <input
-          type="password"
-          name="passwordConfirmation"
-          id="passwordConfirmation"
-          required
-          value="<%= passwordConfirmation ? passwordConfirmation : '' %>"
-        />
-      </div>
+    <div class="container">
+      <div class="form-container">
+        <h1 class="text-center mb-4">Sign Up</h1>
+        <form method="post">
+          <div class="mb-3">
+            <label for="username" class="form-label">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              name="username"
+              id="username"
+              required
+              placeholder="test@example.com..."
+              value="<%= username ? username : '' %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              id="password"
+              required
+              value="<%= password ? password : '' %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="passwordConfirmation" class="form-label"
+              >Confirm Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              name="passwordConfirmation"
+              id="passwordConfirmation"
+              required
+              value="<%= passwordConfirmation ? passwordConfirmation : '' %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="first_name"
+              id="first_name"
+              required
+              value="<%= first_name ? first_name : '' %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="last_name"
+              id="last_name"
+              required
+              value="<%= last_name ? last_name : '' %>"
+            />
+          </div>
+          <div class="mb-3 form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              name="admin"
+              id="admin"
+              value="<% admin %>"
+            />
+            <label class="form-check-label" for="admin">Admin</label>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+        </form>
+        <p class="mt-3 text-center">
+          Already have an account? <a href="/">Log in</a>
+        </p>
 
-      <div>
-        <label for="first_name">FIrst Name</label>
-        <input
-          type="text"
-          name="first_name"
-          id="first_name"
-          required
-          value="<%= first_name ? first_name : '' %>"
-        />
+        <% if (errors && errors.length > 0) { %>
+        <div class="alert alert-danger mt-3">
+          <ul class="mb-0">
+            <% errors.forEach(function(error) { %>
+            <li><%= error.msg %></li>
+            <% }); %>
+          </ul>
+        </div>
+        <% } %>
       </div>
-      <div>
-        <label for="last_name">Last Name</label>
-        <input
-          type="text"
-          name="last_name"
-          id="last_name"
-          required
-          value="<%= last_name ? last_name : '' %>"
-        />
-      </div>
-      <div>
-        <label for="admin">Admin </label>
-        <input type="checkbox" name="admin" id="admin" value="<% admin %>" />
-      </div>
-      <input type="submit" name="submit" id="submit" />
-    </form>
-    <p>Already have an account? <a href="/">Log in</a></p>
-
-    <% if (errors && errors.length > 0) { %>
-    <div class="errors">
-      <ul>
-        <% errors.forEach(function(error) { %>
-        <li><%= error.msg %></li>
-        <% }); %>
-      </ul>
     </div>
-    <% } %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
