@@ -8,7 +8,6 @@ const passport = require("passport");
 /* GET home page. */
 router.get("/", async (req, res, next) => {
   const messages = await Message.find().populate("author");
-  console.log(messages)
   res.render("index", { messages });
 });
 
