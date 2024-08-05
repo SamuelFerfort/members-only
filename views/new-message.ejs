@@ -22,7 +22,7 @@
 <body>
     <div class="container">
         <div class="form-container">
-            <h1 class="mb-4">Posting as: <%= currentUser.fullName %></h1>
+            <h1 class="mb-4">Posting as: <%= currentUser.first_name + " " + currentUser.last_name %></h1>
             <form method="post">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>

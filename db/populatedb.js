@@ -1,6 +1,6 @@
 const { Client } = require("pg");
 require("dotenv").config();
-const { argv } = require("node_process");
+const { argv } = require("node:process");
 
 const SQLTABLES = `
  CREATE TABLE IF NOT EXISTS users (

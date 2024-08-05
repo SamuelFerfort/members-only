@@ -85,7 +85,7 @@ exports.sign_up_form_post = [
 
 exports.verification_post = asyncHandler(async (req, res, next) => {
   if (req.body.password === "123") {
-    await User.updateMembership(req.user._id);
+    await User.updateMembership(req.user.id);
     res.redirect("/");
   } else {
     res.render("verification", {

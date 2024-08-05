@@ -4,7 +4,6 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -12,14 +11,12 @@ const indexRouter = require("./routes/index");
 
 const app = express();
 
-require("./config/database");
 require("./config/passport");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-mongoose.set("strictQuery", false);
 
 app.use(logger("dev"));
 app.use(express.json());
