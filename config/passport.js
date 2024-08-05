@@ -1,12 +1,17 @@
 const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
-const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const pool = require("../db/pool");
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await User.findOne({ username: username });
+      const { rows } = await pool.query(
+        "SELECT * FROM users WHERE username = $1",
+        [username]
+      );
+
+      const user = rows[0];
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
@@ -28,7 +33,10 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
+      id,
+    ]);
+    const user = rows[0];
     done(null, user);
   } catch (err) {
     done(err);
