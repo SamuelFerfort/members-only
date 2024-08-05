@@ -5,10 +5,28 @@ const authController = require("../controllers/authController");
 const messageController = require("../controllers/messageController");
 const { isAuthenticated } = require("../middleware/authMiddleware");
 const passport = require("passport");
-/* GET home page. */
+
 router.get("/", async (req, res, next) => {
-  const messages = await Message.find().populate("author");
-  res.render("index", { messages });
+  try {
+    const results = await Message.getAllMessages();
+    const messages = results.map((row) => {
+      return {
+        id: row.id,
+        title: row.title,
+        text: row.text,
+        timestamp: row.timestamp,
+        author: {
+          id: row.author_id,
+          username: row.username,
+          fullName: row.first_name + " " +  row.last_name,
+        },
+      };
+    });
+    res.render("index", { messages });
+  } catch (err) {
+    console.error("Error retrieving all messages", err);
+    next(err);
+  }
 });
 
 router.get("/sign-up", authController.sign_up_form_get);
@@ -19,7 +37,7 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/",
-    failureFlash: true, // Enable flash messages for authentication failures
+    failureFlash: true,
   }),
   (req, res) => {
     console.log("req.flash():", req.flash());

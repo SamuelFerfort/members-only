@@ -1,11 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const queries = require("../db/queries");
 
-const MessageSchema = new Schema({
-  title: { type: String, required: true },
-  text: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now },
-  author: { type: Schema.Types.ObjectId, ref: "User", required: true }
-});
+class Message {
+  static create(message) {
+    return queries.createMessage(message);
+  }
 
-module.exports = mongoose.model("Message", MessageSchema);
+  static findByIdAndDelete(id) {
+    return queries.deleteMessageById(id);
+  }
+
+  static getAllMessages() {
+    return queries.getAllMessagesAndTheirAuthors()
+  }
+}
+
+module.exports = Message;

@@ -1,25 +1,17 @@
-const mongoose = require("mongoose");
+const queries = require("../db/queries");
 
-const Schema = mongoose.Schema;
+class User {
+  static async findOne({ username }) {
+    return queries.getUserByUsername(username);
+  }
 
-const UserSchema = new Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  first_name: { type: String, required: true },
-  last_name: { type: String, required: true },
-  membership_status: {
-    type: String,
-    required: true,
-    enum: ["regular", "member", "admin"],
-    default: "regular",
-  },
-  messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
+  static async create(data) {
+    return queries.createUser(data);
+  }
 
+  static async updateMembership(id) {
+    return queries.findByIdAndUpdateMembership(id);
+  }
+}
 
-});
-
-UserSchema.virtual("fullName").get(function () {
-  return `${this.first_name} ${this.last_name}`;
-});
-
-module.exports = mongoose.model("User", UserSchema);
+module.exports = User;

@@ -1,7 +1,6 @@
 const Message = require("../models/message");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const User = require("../models/user");
 
 exports.new_message_post = [
   body("title", "Title must not be empty").trim().isLength({ min: 1 }).escape(),
@@ -21,13 +20,13 @@ exports.new_message_post = [
         message: { title: req.body.title, text: req.body.message },
       });
     }
-    const message = new Message({
+    const message = {
       title: req.body.title,
       text: req.body.message,
-      author: req.user._id,
-    });
+      author: req.user.id,
+    };
     try {
-      await message.save();
+      await Message.create(message);
       res.redirect("/");
     } catch (err) {
       next(err);
@@ -36,7 +35,9 @@ exports.new_message_post = [
 ];
 
 exports.delete_post = asyncHandler(async (req, res, next) => {
-  await Message.findByIdAndDelete(req.body.messageId);
-
+  const deletedMessage = await Message.findByIdAndDelete(req.body.messageId);
+  if (!deletedMessage) {
+    return res.status(404).send("Message not found");
+  }
   res.redirect("/");
 });
