@@ -67,15 +67,15 @@ exports.sign_up_form_post = [
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = new User({
+    const user = {
       username: req.body.username,
       password: hashedPassword,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       membership_status,
-    });
+    };
     try {
-      await user.save();
+      await User.create(user);
       res.redirect("/");
     } catch (error) {
       next(error);
@@ -85,7 +85,7 @@ exports.sign_up_form_post = [
 
 exports.verification_post = asyncHandler(async (req, res, next) => {
   if (req.body.password === "123") {
-    await User.findByIdAndUpdate(req.user._id, { membership_status: "member" });
+    await User.updateMembership(req.user._id);
     res.redirect("/");
   } else {
     res.render("verification", {
